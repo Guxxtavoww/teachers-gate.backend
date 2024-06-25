@@ -30,7 +30,7 @@ export class AuthController {
       sameSite: 'strict',
     });
 
-    return dto;
+    return res.send(dto) as unknown as AccessDTO;
   }
 
   @Public()

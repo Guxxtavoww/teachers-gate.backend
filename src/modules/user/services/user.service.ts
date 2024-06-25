@@ -14,17 +14,24 @@ export class UserService {
   constructor(private readonly paginationService: PaginationService) {}
 
   private createUserQueryBuilder(selectPassword?: boolean) {
-    return userRepository
+    const base_fields: `user.${keyof User}`[] = [
+      'user.id',
+      'user.created_at',
+      'user.updated_at',
+      'user.user_name',
+      'user.user_email',
+      'user.user_type',
+    ];
+
+    const baseQueryBuilder = userRepository
       .createQueryBuilder('user')
-      .select([
-        'user.id',
-        'user.created_at',
-        'user.updated_at',
-        'user.user_name',
-        'user.user_email',
-        'user.user_type',
-        selectPassword ? 'user.hashed_password' : '',
-      ]);
+      .select(base_fields);
+
+    if (selectPassword) {
+      baseQueryBuilder.select([...base_fields, 'user.hashed_password']);
+    }
+
+    return baseQueryBuilder;
   }
 
   async paginateUsers({

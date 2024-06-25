@@ -13,7 +13,7 @@ export const loginSchema = z
   .object({
     user_email: emailStringSchema,
     password: optionalStringSchema,
-    auth_provider: userAuthProvidersSchema,
+    auth_provider: userAuthProvidersSchema.default(UserAuthProviders.EMAIL),
   })
   .refine(
     (data) =>

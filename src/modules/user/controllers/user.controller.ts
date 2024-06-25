@@ -17,6 +17,7 @@ import { UserService } from '../services/user.service';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import { UpdateUserDTO } from '../dtos/update-user.dto';
 import { PaginateUsersDTO } from '../dtos/paginate-users.dto';
+import { ApiPaginationQuery } from 'src/shared/decorators/api-pagination-query.decorator';
 
 @ApiTags('user')
 @Controller('user')
@@ -24,6 +25,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Public()
+  @ApiPaginationQuery()
   @Get('paginate')
   async paginate(@Query() querys: PaginateUsersDTO) {
     return this.userService.paginateUsers(querys);

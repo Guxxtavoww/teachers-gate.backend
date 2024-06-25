@@ -10,13 +10,14 @@ import {
 import { userTypeSchema } from 'src/modules/user/dtos/user-type.schema';
 import { UserAuthProviders } from 'src/modules/user/enums/user-auth-providers.enum';
 import { userAuthProvidersSchema } from 'src/modules/user/dtos/user-auth-providers.schema';
+import { UserTypeEnum } from 'src/modules/user/enums/user-type.enum';
 
 export const registerSchema = z
   .object({
     user_email: emailStringSchema,
     password: optionalStringSchema,
     user_name: stringSchema,
-    user_auth_provider: userAuthProvidersSchema,
+    user_auth_provider: userAuthProvidersSchema.default(UserAuthProviders.EMAIL),
     user_type: userTypeSchema,
   })
   .refine(
@@ -49,8 +50,8 @@ export class RegisterDTO extends createZodDto(registerSchema) {
   user_name: string;
 
   @ApiProperty({
-    description: 'The phone number of the user',
-    example: '+551112345678',
+    description: 'The name of the user',
+    example: UserTypeEnum.TEACHER,
   })
-  phone_number: string;
+  user_type: UserTypeEnum;
 }

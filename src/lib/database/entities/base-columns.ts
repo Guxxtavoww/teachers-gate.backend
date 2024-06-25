@@ -18,5 +18,6 @@ export const baseColumns = [
     type: 'timestamp',
     default: null,
     onUpdate: 'CURRENT_TIMESTAMP',
+    isNullable: true,
   },
 ] satisfies TableColumnOptions[];

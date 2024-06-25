@@ -1,4 +1,5 @@
 import { ApiQuery, type ApiQueryOptions } from '@nestjs/swagger';
+import { OrderByEnum } from '../enums.shared';
 
 export type Params = ApiQueryOptions[];
 
@@ -10,6 +11,7 @@ export function ApiPaginationQuery(params?: Params): MethodDecorator {
         'The limit of items. If not passed the default limit will be 10',
       required: false,
       name: 'limit',
+      example: 10,
     })(target, key, descriptor);
 
     ApiQuery({
@@ -17,6 +19,23 @@ export function ApiPaginationQuery(params?: Params): MethodDecorator {
       description: 'The Current Page. If not passed the default page will be 1',
       required: false,
       name: 'page',
+      example: 1,
+    })(target, key, descriptor);
+
+    ApiQuery({
+      type: 'enum',
+      description: 'Order By Created At',
+      required: false,
+      name: 'order_by_created_at',
+      enum: OrderByEnum,
+    })(target, key, descriptor);
+
+    ApiQuery({
+      type: 'enum',
+      description: 'Order By Updated At',
+      required: false,
+      name: 'order_by_updated_at',
+      enum: OrderByEnum,
     })(target, key, descriptor);
 
     if (!params || !params.length) return;

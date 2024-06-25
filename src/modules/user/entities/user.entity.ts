@@ -41,8 +41,8 @@ export class User extends Base {
   private static async handleCreateHashedPassword(
     password: string,
   ): Promise<string> {
-    return import('src/utils/password.utils').then(({ createHashedPassword }) =>
-      createHashedPassword(password),
+    return import('../../../utils/password.utils').then(
+      ({ createHashedPassword }) => createHashedPassword(password),
     );
   }
 
@@ -71,7 +71,9 @@ export class User extends Base {
         );
 
       if (database_password) {
-        const { validatePassword } = await import('src/utils/password.utils');
+        const { validatePassword } = await import(
+          '../../../utils/password.utils'
+        );
 
         const isMatch = await validatePassword(
           previous_password,

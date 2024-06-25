@@ -10,7 +10,7 @@ import { baseColumns } from '../entities/base-columns';
 
 export class Users1719274509300 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    queryRunner.createTable(
+    await queryRunner.createTable(
       new Table({
         name: 'users',
         columns: [
