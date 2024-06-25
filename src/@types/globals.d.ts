@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import type { IPaginationOptions } from 'nestjs-typeorm-paginate';
 
+import type { UserTypeEnum } from 'src/modules/user/enums/user-type.enum';
+import type { UserAuthProviders } from 'src/modules/user/enums/user-auth-providers.enum';
+
 declare global {
   namespace NodeJS {
     interface ProcessEnv extends EnvType {}
@@ -28,6 +31,8 @@ declare global {
     id: string;
     email: string;
     name: string;
+    user_type: UserTypeEnum;
+    user_auth_provider: UserAuthProviders;
   }
 
   export type DecodedTokenType = IJwtPayload & {

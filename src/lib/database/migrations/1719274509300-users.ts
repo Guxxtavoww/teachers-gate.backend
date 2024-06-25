@@ -27,6 +27,7 @@ export class Users1719274509300 implements MigrationInterface {
           {
             name: 'user_email',
             type: 'varchar',
+            isUnique: true,
           },
           {
             name: 'user_type',
@@ -42,7 +43,7 @@ export class Users1719274509300 implements MigrationInterface {
             name: 'user_auth_provider',
             type: 'enum',
             enum: user_auth_providers,
-            default: `'${UserAuthProviders.EMAIl}'`,
+            default: `'${UserAuthProviders.EMAIL}'`,
           },
         ],
       }),

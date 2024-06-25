@@ -4,7 +4,6 @@ import { JwtService } from '@nestjs/jwt';
 import { ENV_VARIABLES } from 'src/config/env.config';
 import { validatePassword } from 'src/utils/password.utils';
 import { User } from 'src/modules/user/entities/user.entity';
-import { UserTypeEnum } from 'src/modules/user/enums/user-type.enum';
 import { UserService } from 'src/modules/user/services/user.service';
 import { UserAuthProviders } from 'src/modules/user/enums/user-auth-providers.enum';
 import { BadRequestError } from 'src/lib/http-exceptions/errors/types/bad-request-error';
@@ -46,10 +45,10 @@ export class AuthService {
 
   public async registerAndLogin({
     password,
-    phone_number,
     user_email,
     user_name,
     user_auth_provider,
+    user_type,
   }: RegisterPayload): Promise<AccessDTO> {
     const is_google_provider = user_auth_provider === UserAuthProviders.GOOGLE;
 
@@ -58,9 +57,8 @@ export class AuthService {
       user_auth_provider,
       user_email,
       user_name,
-      user_type: UserTypeEnum.COMMOM,
+      user_type,
       password,
-      phone_number,
     });
 
     const access_token = await this.generateAccessToken(newUser);
@@ -111,8 +109,8 @@ export class AuthService {
         user_type: user.user_type,
         created_at: user.created_at,
         is_email_verified: user.is_email_verified,
-        phone_number: user.phone_number,
-        total_friends_count: user.total_friends_count,
+        // phone_number: user.phone_number,
+        // total_friends_count: user.total_friends_count,
         user_auth_provider: user.user_auth_provider,
       },
       access_token,

@@ -1,5 +1,5 @@
 export enum UserAuthProviders {
-  EMAIl = 'email',
+  EMAIL = 'email',
   GOOGLE = 'google',
   MICROSOFT = 'microsoft',
 }

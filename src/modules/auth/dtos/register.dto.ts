@@ -4,20 +4,20 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import {
   emailStringSchema,
-  optionalPhoneNumberStringSchema,
   optionalStringSchema,
   stringSchema,
 } from 'src/shared/schemas.shared';
-import { userAuthProviderSchema } from 'src/modules/user/dtos/create-user.dto';
-import { UserAuthProviders } from 'src/modules/user/enum/user-auth-providers.enum';
+import { userTypeSchema } from 'src/modules/user/dtos/user-type.schema';
+import { UserAuthProviders } from 'src/modules/user/enums/user-auth-providers.enum';
+import { userAuthProvidersSchema } from 'src/modules/user/dtos/user-auth-providers.schema';
 
 export const registerSchema = z
   .object({
     user_email: emailStringSchema,
     password: optionalStringSchema,
     user_name: stringSchema,
-    phone_number: optionalPhoneNumberStringSchema,
-    user_auth_provider: userAuthProviderSchema,
+    user_auth_provider: userAuthProvidersSchema,
+    user_type: userTypeSchema,
   })
   .refine(
     (data) =>

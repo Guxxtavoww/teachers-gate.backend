@@ -2,18 +2,18 @@ import { ApiProperty } from '@nestjs/swagger';
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'nestjs-zod/z';
 
-import { userAuthProviderSchema } from 'src/modules/user/dtos/create-user.dto';
-import { UserAuthProviders } from 'src/modules/user/enum/user-auth-providers.enum';
 import {
   emailStringSchema,
   optionalStringSchema,
 } from 'src/shared/schemas.shared';
+import { UserAuthProviders } from 'src/modules/user/enums/user-auth-providers.enum';
+import { userAuthProvidersSchema } from 'src/modules/user/dtos/user-auth-providers.schema';
 
 export const loginSchema = z
   .object({
     user_email: emailStringSchema,
     password: optionalStringSchema,
-    auth_provider: userAuthProviderSchema,
+    auth_provider: userAuthProvidersSchema,
   })
   .refine(
     (data) =>

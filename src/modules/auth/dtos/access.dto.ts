@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { UserTypeEnum } from 'src/modules/user/enum/user-type.enum';
-import { UserAuthProviders } from 'src/modules/user/enum/user-auth-providers.enum';
+import { UserTypeEnum } from 'src/modules/user/enums/user-type.enum';
+import { UserAuthProviders } from 'src/modules/user/enums/user-auth-providers.enum';
 
-class UserDTO {
+export class UserDTO {
   @ApiProperty({ description: 'The unique identifier of the user' })
   id: string;
 
@@ -22,8 +22,8 @@ class UserDTO {
   @ApiProperty({ description: 'The date and time when the user was created' })
   created_at: string;
 
-  @ApiProperty({ description: 'The phone number of the user', nullable: true })
-  phone_number: NullableValue<string>;
+  // @ApiProperty({ description: 'The phone number of the user', nullable: true })
+  // phone_number: NullableValue<string>;
 
   @ApiProperty({
     description: 'The phone number of the user',
@@ -31,10 +31,10 @@ class UserDTO {
   })
   user_auth_provider: UserAuthProviders;
 
-  @ApiProperty({
-    description: 'Total Friends count',
-  })
-  total_friends_count: number;
+  // @ApiProperty({
+  //   description: 'Total Friends count',
+  // })
+  // total_friends_count: number;
 }
 
 export class AccessDTO {

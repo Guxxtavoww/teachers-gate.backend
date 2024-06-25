@@ -17,7 +17,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   try {
-    app.enableCors();
+    app.enableCors({
+      origin: ['http://localhost:5000', 'http://localhost:3000'],
+    });
     app.enableShutdownHooks();
     app.setGlobalPrefix('server');
 

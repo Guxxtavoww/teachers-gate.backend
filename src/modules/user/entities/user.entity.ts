@@ -18,7 +18,7 @@ export class User extends Base {
   hashed_password: NullableValue<string>;
 
   @Index()
-  @Column('varchar')
+  @Column('varchar', { unique: true })
   user_email: string;
 
   @Index()
@@ -31,7 +31,7 @@ export class User extends Base {
   @Column({
     type: 'enum',
     enum: UserAuthProviders,
-    default: UserAuthProviders.EMAIl,
+    default: UserAuthProviders.EMAIL,
   })
   user_auth_provider: UserAuthProviders;
 

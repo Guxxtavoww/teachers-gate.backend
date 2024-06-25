@@ -1,7 +1,17 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Res,
+} from '@nestjs/common';
+import type { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 
+import { ENV_VARIABLES } from 'src/config/env.config';
 import { Public } from 'src/shared/decorators/auth.decorator';
+import { DataBaseInterceptorDecorator } from 'src/shared/decorators/database-interceptor.decorator';
 
 import { LoginDTO } from '../dtos/login.dto';
 import { AccessDTO } from '../dtos/access.dto';
@@ -13,17 +23,38 @@ import { AuthService } from '../services/auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Public()
-  @HttpCode(HttpStatus.OK)
-  @Post('login')
-  async signIn(@Body() signInDto: LoginDTO): Promise<AccessDTO> {
-    return this.authService.signIn(signInDto);
+  private setAccessTokenCookie(dto: AccessDTO, res: Response) {
+    res.cookie('access_token', dto.access_token, {
+      httpOnly: true,
+      secure: ENV_VARIABLES.ENV === 'prod',
+      sameSite: 'strict',
+    });
+
+    return dto;
   }
 
   @Public()
   @HttpCode(HttpStatus.OK)
+  @Post('login')
+  async signIn(
+    @Body() signInDto: LoginDTO,
+    @Res() res: Response,
+  ): Promise<AccessDTO> {
+    const accessDTO = await this.authService.signIn(signInDto);
+
+    return this.setAccessTokenCookie(accessDTO, res);
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @DataBaseInterceptorDecorator()
   @Post('register')
-  async registerAndLogin(@Body() registerDTO: RegisterDTO): Promise<AccessDTO> {
-    return this.authService.registerAndLogin(registerDTO);
+  async registerAndLogin(
+    @Body() registerDTO: RegisterDTO,
+    @Res() res: Response,
+  ): Promise<AccessDTO> {
+    const accessDTO = await this.authService.registerAndLogin(registerDTO);
+
+    return this.setAccessTokenCookie(accessDTO, res);
   }
 }

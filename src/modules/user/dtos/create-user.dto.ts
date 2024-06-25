@@ -18,12 +18,12 @@ export const createUserSchema = z
     user_type: userTypeSchema,
     password: optionalStringSchema,
     user_auth_provider: userAuthProvidersSchema.default(
-      UserAuthProviders.EMAIl,
+      UserAuthProviders.EMAIL,
     ),
   })
   .refine(
     (data) => {
-      if (data.user_auth_provider !== UserAuthProviders.EMAIl && !data.password)
+      if (data.user_auth_provider !== UserAuthProviders.EMAIL && !data.password)
         return false;
 
       return true;
@@ -31,6 +31,8 @@ export const createUserSchema = z
     { message: 'Password is required' },
   );
 
-export type CreateUserPayload = z.infer<typeof createUserSchema>;
+export type CreateUserPayload = z.infer<typeof createUserSchema> & {
+  is_email_verified?: boolean;
+};
 
 export class CreateUserDTO extends createZodDto(createUserSchema) {}
