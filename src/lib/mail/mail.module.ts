@@ -1,8 +1,9 @@
 import { Resend } from 'resend';
 import { Global, Module } from '@nestjs/common';
 
-import { MailService } from './services/mail.service';
 import { ENV_VARIABLES } from 'src/config/env.config';
+
+import { MailService } from './services/mail.service';
 
 @Global()
 @Module({
