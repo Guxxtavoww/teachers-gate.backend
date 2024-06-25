@@ -6,6 +6,7 @@ import {
   optionalStringSchema,
   optionalStringToNumberSchema,
   emailStringSchema,
+  optionalUrlStringSchema,
 } from 'src/shared/schemas.shared';
 
 export const envSchema = z.object({
@@ -20,6 +21,9 @@ export const envSchema = z.object({
   ENV: z.enum(['prod', 'dev']).default('dev'),
   RESEND_API_KEY: stringSchema,
   EMAIL_FROM: emailStringSchema,
+  EMAIL_CONFIRMATION_URL: optionalUrlStringSchema.default(
+    'http://localhost:3000/user/confirm-email',
+  ),
 });
 
 export type EnvType = z.infer<typeof envSchema>;

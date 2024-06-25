@@ -109,8 +109,6 @@ export class AuthService {
         user_type: user.user_type,
         created_at: user.created_at,
         is_email_verified: user.is_email_verified,
-        // phone_number: user.phone_number,
-        // total_friends_count: user.total_friends_count,
         user_auth_provider: user.user_auth_provider,
       },
       access_token,

@@ -21,6 +21,7 @@ export class UserService {
       'user.user_name',
       'user.user_email',
       'user.user_type',
+      'user.is_email_verified',
     ];
 
     const baseQueryBuilder = userRepository
@@ -71,8 +72,8 @@ export class UserService {
     });
   }
 
-  async getUserByEmail(user_email: string) {
-    const user = await this.createUserQueryBuilder(true)
+  async getUserByEmail(user_email: string, selectPassword = true) {
+    const user = await this.createUserQueryBuilder(selectPassword)
       .where('user.user_email = :user_email', { user_email })
       .getOne();
 
@@ -93,6 +94,18 @@ export class UserService {
     }
 
     return user;
+  }
+
+  public async markEmailAsConfirmed(user_email: string) {
+    const userToUpdate = await this.getUserByEmail(user_email, false);
+
+    if (userToUpdate.is_email_verified) return;
+
+    const userItem = new User();
+
+    userItem.is_email_verified = true;
+
+    return userRepository.update(userToUpdate.id, userItem);
   }
 
   async createUser(payload: CreateUserPayload) {
