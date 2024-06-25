@@ -16,7 +16,8 @@ export const envSchema = z.object({
   JWT_SECRET: stringSchema,
   JWT_EXPIRES_IN: stringSchema,
   PORT: optionalStringToNumberSchema.default('5000'),
-  ENV: z.enum(['prod', 'dev']),
+  ENV: z.enum(['prod', 'dev']).default('dev'),
+  RESEND_API_KEY: stringSchema,
 });
 
 export type EnvType = z.infer<typeof envSchema>;

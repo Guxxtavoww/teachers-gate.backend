@@ -16,7 +16,7 @@ export const baseColumns = [
   {
     name: 'updated_at',
     type: 'timestamp',
-    default: 'CURRENT_TIMESTAMP',
+    default: null,
     onUpdate: 'CURRENT_TIMESTAMP',
   },
 ] satisfies TableColumnOptions[];

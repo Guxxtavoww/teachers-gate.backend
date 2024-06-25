@@ -3,12 +3,12 @@ import { APP_PIPE } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { ZodValidationPipe } from 'nestjs-zod';
 
-import { IKutModule } from './modules/ikut.module';
+import { TeachersGateModule } from './modules/teachers-gate.module';
 import { AppDataSource } from './lib/database/database.providers';
 import { PaginationModule } from './lib/pagination/pagination.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), IKutModule, PaginationModule],
+  imports: [ConfigModule.forRoot(), TeachersGateModule, PaginationModule],
   providers: [
     {
       provide: APP_PIPE,
