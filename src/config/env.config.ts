@@ -5,6 +5,7 @@ import {
   stringSchema,
   optionalStringSchema,
   optionalStringToNumberSchema,
+  emailStringSchema,
 } from 'src/shared/schemas.shared';
 
 export const envSchema = z.object({
@@ -18,6 +19,7 @@ export const envSchema = z.object({
   PORT: optionalStringToNumberSchema.default('5000'),
   ENV: z.enum(['prod', 'dev']).default('dev'),
   RESEND_API_KEY: stringSchema,
+  EMAIL_FROM: emailStringSchema,
 });
 
 export type EnvType = z.infer<typeof envSchema>;
