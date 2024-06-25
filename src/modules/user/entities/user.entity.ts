@@ -1,11 +1,12 @@
 import { Column, Entity, Index } from 'typeorm';
 
 import { Base } from 'src/lib/database/entities/base.entity';
+import { BadRequestError } from 'src/lib/http-exceptions/errors/types/bad-request-error';
 
 import { UserTypeEnum } from '../enums/user-type.enum';
 import type { CreateUserPayload } from '../dtos/create-user.dto';
 import type { UpdateUserPayload } from '../dtos/update-user.dto';
-import { BadRequestError } from 'src/lib/http-exceptions/errors/types/bad-request-error';
+import { UserAuthProviders } from '../enums/user-auth-providers.enum';
 
 @Entity('users')
 export class User extends Base {
@@ -26,6 +27,16 @@ export class User extends Base {
     enum: UserTypeEnum,
   })
   user_type: UserTypeEnum;
+
+  @Column({
+    type: 'enum',
+    enum: UserAuthProviders,
+    default: UserAuthProviders.EMAIl,
+  })
+  user_auth_provider: UserAuthProviders;
+
+  @Column('boolean', { default: false })
+  is_email_verified: boolean;
 
   private static async handleCreateHashedPassword(
     password: string,
@@ -67,9 +78,8 @@ export class User extends Base {
           database_password,
         );
 
-        if (!isMatch) {
+        if (!isMatch)
           throw new BadRequestError('Previous password is incorrect.');
-        }
       }
 
       userItem.hashed_password =

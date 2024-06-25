@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 
 import { PaginationService } from 'src/lib/pagination/pagination.service';
 
-import { PaginateUsersPayload } from '../dtos/paginate-users.dto';
 import { userRepository } from '../repositorys/user.repository';
+import type { CreateUserPayload } from '../dtos/create-user.dto';
+import type { PaginateUsersPayload } from '../dtos/paginate-users.dto';
 
 @Injectable()
 export class UserService {
@@ -49,5 +50,9 @@ export class UserService {
       limit,
       page,
     });
+  }
+
+  async createUser(payload: CreateUserPayload) {
+    
   }
 }

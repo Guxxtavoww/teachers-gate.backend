@@ -1,5 +1,9 @@
 import { MigrationInterface, QueryRunner, Table, TableIndex } from 'typeorm';
 
+import {
+  UserAuthProviders,
+  user_auth_providers,
+} from 'src/modules/user/enums/user-auth-providers.enum';
 import { users_types } from 'src/modules/user/enums/user-type.enum';
 
 import { baseColumns } from '../entities/base-columns';
@@ -28,6 +32,17 @@ export class Users1719274509300 implements MigrationInterface {
             name: 'user_type',
             type: 'enum',
             enum: users_types,
+          },
+          {
+            name: 'is_email_verified',
+            type: 'boolean',
+            default: false,
+          },
+          {
+            name: 'user_auth_provider',
+            type: 'enum',
+            enum: user_auth_providers,
+            default: `'${UserAuthProviders.EMAIl}'`,
           },
         ],
       }),
