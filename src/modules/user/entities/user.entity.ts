@@ -67,9 +67,8 @@ export class User extends Base {
           database_password,
         );
 
-        if (!isMatch) {
+        if (!isMatch)
           throw new BadRequestError('Previous password is incorrect.');
-        }
       }
 
       userItem.hashed_password =
