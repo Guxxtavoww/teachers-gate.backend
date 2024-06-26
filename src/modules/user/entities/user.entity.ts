@@ -1,4 +1,4 @@
-import { Column, Entity, Index } from 'typeorm';
+import { Column, Entity, Index, OneToMany } from 'typeorm';
 
 import { Base } from 'src/lib/database/entities/base.entity';
 import { BadRequestError } from 'src/lib/http-exceptions/errors/types/bad-request-error';
@@ -7,6 +7,7 @@ import { UserTypeEnum } from '../enums/user-type.enum';
 import type { CreateUserPayload } from '../dtos/create-user.dto';
 import type { UpdateUserPayload } from '../dtos/update-user.dto';
 import { UserAuthProviders } from '../enums/user-auth-providers.enum';
+import { Classroom } from 'src/modules/classroom/entities/classroom.entity';
 
 @Entity('users')
 export class User extends Base {
@@ -37,6 +38,9 @@ export class User extends Base {
 
   @Column('boolean', { default: false })
   is_email_verified: boolean;
+
+  @OneToMany(() => Classroom, (classroom) => classroom.teacher)
+  tutoring_classrooms: Classroom[]
 
   private static async handleCreateHashedPassword(
     password: string,
