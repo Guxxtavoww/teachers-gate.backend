@@ -106,11 +106,7 @@ export class UserService {
 
     if (userToUpdate.is_email_verified) return;
 
-    const userItem = new User();
-
-    userItem.is_email_verified = true;
-
-    return userRepository.update(userToUpdate.id, userItem);
+    return userRepository.update(userToUpdate.id, { is_email_verified: true });
   }
 
   async createUser(payload: CreateUserPayload) {
