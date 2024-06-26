@@ -19,7 +19,10 @@ export class EmailConfirmationController {
   }
 
   @Put('confirm-email')
-  async confirmEmail(@Query() querys: ConfirmEmailDTO) {
-    return this.emailConfirmationService.confirmEmail(querys);
+  async confirmEmail(
+    @DecodedToken() decoded_token: DecodedTokenType,
+    @Query() querys: ConfirmEmailDTO,
+  ) {
+    return this.emailConfirmationService.confirmEmail(querys, decoded_token.id);
   }
 }

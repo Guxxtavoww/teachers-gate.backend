@@ -96,8 +96,13 @@ export class UserService {
     return user;
   }
 
-  public async markEmailAsConfirmed(user_email: string) {
+  public async markEmailAsConfirmed(
+    user_email: string,
+    logged_in_user_id: string,
+  ) {
     const userToUpdate = await this.getUserByEmail(user_email, false);
+
+    if (userToUpdate.id !== logged_in_user_id) throw new ForbiddenException();
 
     if (userToUpdate.is_email_verified) return;
 

@@ -44,7 +44,7 @@ export class EmailConfirmationService {
     });
   }
 
-  async confirmEmail(payload: ConfirmEmailPayload) {
+  async confirmEmail(payload: ConfirmEmailPayload, logged_in_user_id: string) {
     const verifiedToken = await this.jwtService.verifyAsync(payload.token, {
       secret: ENV_VARIABLES.JWT_SECRET,
     });
@@ -52,7 +52,10 @@ export class EmailConfirmationService {
     try {
       const parsedToken = await parsedTokenSchema.parseAsync(verifiedToken);
 
-      return this.userService.markEmailAsConfirmed(parsedToken.user_email);
+      return this.userService.markEmailAsConfirmed(
+        parsedToken.user_email,
+        logged_in_user_id,
+      );
     } catch (err) {
       throw new BadRequestError('Invalid Token');
     }
