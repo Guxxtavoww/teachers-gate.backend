@@ -10,7 +10,12 @@ export class Student extends Base {
   @Column('uuid')
   user_id: string;
 
+  @Index()
+  @Column('uuid')
+  classroom_id: string
+
   @ManyToOne(() => Classroom, (classroom) => classroom.students)
+  @JoinColumn({ name: 'classroom_id' })
   classroom: Classroom;
 
   @ManyToOne(() => User)

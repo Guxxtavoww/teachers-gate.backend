@@ -27,6 +27,8 @@ declare global {
 
   export type Maybe<T> = NullableValue<T> | undefined;
 
+  export type CountHandler = readonly 'increment' | 'decrement';
+
   export interface IJwtPayload {
     id: string;
     email: string;
