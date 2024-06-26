@@ -1,5 +1,6 @@
 import { z } from 'nestjs-zod/z';
 import { createZodDto } from 'nestjs-zod';
+import { ApiProperty } from '@nestjs/swagger';
 
 import { stringSchema } from 'src/shared/schemas.shared';
 
@@ -11,4 +12,9 @@ export const confirmEmailSchema = z.object({
 
 export type ConfirmEmailPayload = z.infer<typeof confirmEmailSchema>;
 
-export class ConfirmEmailDTO extends createZodDto(confirmEmailSchema) {}
+export class ConfirmEmailDTO extends createZodDto(confirmEmailSchema) {
+  @ApiProperty({
+    description: 'Token',
+  })
+  token: string;
+}
