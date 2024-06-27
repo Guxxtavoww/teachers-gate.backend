@@ -12,12 +12,14 @@ import {
 import { Public } from 'src/shared/decorators/auth.decorator';
 import { UuidParam } from 'src/shared/decorators/uuid-param.decorator';
 import { DecodedToken } from 'src/shared/decorators/decoded-token.decorator';
+import { ApiPaginationQuery } from 'src/shared/decorators/api-pagination-query.decorator';
+import { DataBaseInterceptorDecorator } from 'src/shared/decorators/database-interceptor.decorator';
 
+import { users_types } from '../enums/user-type.enum';
 import { UserService } from '../services/user.service';
 import { CreateUserDTO } from '../dtos/create-user.dto';
 import { UpdateUserDTO } from '../dtos/update-user.dto';
 import { PaginateUsersDTO } from '../dtos/paginate-users.dto';
-import { ApiPaginationQuery } from 'src/shared/decorators/api-pagination-query.decorator';
 
 @ApiTags('user')
 @Controller('user')
@@ -31,16 +33,26 @@ export class UserController {
     return this.userService.paginateUsers(querys);
   }
 
+  @Public()
+  @Get('user-types')
+  getUserTypes() {
+    return users_types;
+  }
+
+  @Public()
   @Get(':id')
   async getOne(@UuidParam('id') id: string) {
     return this.userService.getUserById(id, false);
   }
 
+  @Public()
+  @DataBaseInterceptorDecorator()
   @Post('')
   async create(@Body() body: CreateUserDTO) {
     return this.userService.createUser(body);
   }
 
+  @DataBaseInterceptorDecorator()
   @Put(':id')
   async update(
     @UuidParam('id') id: string,
