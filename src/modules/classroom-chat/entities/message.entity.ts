@@ -1,7 +1,7 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 
 import { Base } from 'src/lib/database/entities/base.entity';
-import { Student } from 'src/modules/student/entities/student.entity';
+import { ClassroomMember } from 'src/modules/classroom-member/entities/classroom-member.entity';
 
 import { ClassroomChat } from './classroom-chat.entity';
 
@@ -22,7 +22,10 @@ export class Message extends Base {
   @JoinColumn({ name: 'classroom_chat_id' })
   classroom_chat: ClassroomChat;
 
-  @ManyToOne(() => Student, (student) => student.sended_messages)
+  @ManyToOne(
+    () => ClassroomMember,
+    (classroomMClassroomMember) => classroomMClassroomMember.sended_messages,
+  )
   @JoinColumn({ name: 'message_owner_id' })
-  message_owner: Student;
+  message_owner: ClassroomMember;
 }

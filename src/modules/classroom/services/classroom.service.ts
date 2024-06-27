@@ -32,7 +32,7 @@ export class ClassroomService {
       'classroom.updated_at',
       'classroom.classroom_description',
       'classroom.classroom_name',
-      'classroom.classroom_student_count',
+      'classroom.classroom_member_count',
       'teacher.id',
       'teacher.user_email',
       'teacher.user_name',
@@ -76,13 +76,13 @@ export class ClassroomService {
   }
 
   async handleClassroomStudentCount(classroom: Classroom, type: CountHandler) {
-    if (classroom.classroom_student_count === 0 && type === 'decrement')
+    if (classroom.classroom_member_count === 0 && type === 'decrement')
       throw new BadRequestError('Cant decrement');
 
-    classroom.classroom_student_count += type === 'increment' ? 1 : -1;
+    classroom.classroom_member_count += type === 'increment' ? 1 : -1;
 
     return classroomRepository.update(classroom.id, {
-      classroom_student_count: classroom.classroom_student_count,
+      classroom_member_count: classroom.classroom_member_count,
     });
   }
 

@@ -5,8 +5,8 @@ import { User } from 'src/modules/user/entities/user.entity';
 import { Classroom } from 'src/modules/classroom/entities/classroom.entity';
 import { Message } from 'src/modules/classroom-chat/entities/message.entity';
 
-@Entity('students')
-export class Student extends Base {
+@Entity('classroom-members')
+export class ClassroomMember extends Base {
   @Index()
   @Column('uuid')
   user_id: string;
@@ -15,7 +15,7 @@ export class Student extends Base {
   @Column('uuid')
   classroom_id: string
 
-  @ManyToOne(() => Classroom, (classroom) => classroom.students)
+  @ManyToOne(() => Classroom, (classroom) => classroom.members)
   @JoinColumn({ name: 'classroom_id' })
   classroom: Classroom;
 
@@ -23,6 +23,6 @@ export class Student extends Base {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @OneToMany(() => Message, (message) => message.message_onwer)
+  @OneToMany(() => Message, (message) => message.message_owner)
   sended_messages: Message[]
 }

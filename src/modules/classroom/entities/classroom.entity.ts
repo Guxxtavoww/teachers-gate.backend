@@ -9,7 +9,7 @@ import {
 
 import { Base } from 'src/lib/database/entities/base.entity';
 import { User } from 'src/modules/user/entities/user.entity';
-import { Student } from 'src/modules/student/entities/student.entity';
+import { ClassroomMember } from 'src/modules/classroom-member/entities/classroom-member.entity';
 
 import type { UpdateClassroomPayload } from '../dtos/update-classroom.dto';
 import type { CreateClassroomPayload } from '../dtos/create-classroom.dto';
@@ -28,14 +28,14 @@ export class Classroom extends Base {
   teacher_id: string;
 
   @Column('int', { default: 0 })
-  classroom_student_count: number;
+  classroom_member_count: number;
 
   @ManyToOne(() => User, (user) => user.tutoring_classrooms)
   @JoinColumn({ name: 'teacher_id' })
   teacher: User;
 
-  @OneToMany(() => Student, (student) => student.classroom)
-  students: Student[];
+  @OneToMany(() => ClassroomMember, (classroomMember) => classroomMember.classroom)
+  members: ClassroomMember[];
 
   static create(payload: CreateClassroomPayload & { teacher_id: string }) {
     const classroom = new Classroom();
