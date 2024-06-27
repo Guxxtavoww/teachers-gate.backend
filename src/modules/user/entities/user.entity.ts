@@ -40,7 +40,7 @@ export class User extends Base {
   is_email_verified: boolean;
 
   @OneToMany(() => Classroom, (classroom) => classroom.teacher)
-  tutoring_classrooms: Classroom[]
+  tutoring_classrooms: Classroom[];
 
   private static async handleCreateHashedPassword(
     password: string,
