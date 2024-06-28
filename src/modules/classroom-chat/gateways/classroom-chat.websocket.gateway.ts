@@ -7,6 +7,7 @@ import {
   MessageBody,
 } from '@nestjs/websockets';
 import { Logger } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { Socket, Server } from 'socket.io';
 
 import { ENV_VARIABLES } from 'src/config/env.config';
@@ -25,17 +26,19 @@ export class ClassroomChatGateway
   constructor(
     private readonly classroomChatService: ClassroomChatService,
     private readonly messageService: MessageService,
+    private readonly jwtService: JwtService,
   ) {}
 
   @WebSocketServer() server: Server;
 
-  async handleConnection(socket: Socket): Promise<void> {
-    const socketId = socket.id;
-    console.log(
-      `New connecting... socket id:`,
-      socketId,
-      socket.handshake.auth,
-    );
+  async handleConnection(socket: Socket) {
+    const token = socket.handshake.auth.token;
+
+    if (!token) return socket.disconnect();
+
+    // const verifiedToken: DecodedTokenType = await this.jwtService.verifyAsync(token, {
+    //   secret: ENV_VARIABLES.JWT_SECRET,
+    // });    
   }
 
   async handleDisconnect(socket: Socket): Promise<void> {

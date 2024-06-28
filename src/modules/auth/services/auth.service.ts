@@ -29,10 +29,7 @@ export class AuthService {
     if (auth_provider === UserAuthProviders.EMAIL)
       await this.handleEmailSignIn(user, password);
 
-    if (
-      auth_provider === UserAuthProviders.GOOGLE &&
-      user.user_auth_provider !== UserAuthProviders.GOOGLE
-    ) {
+    if (auth_provider !== user.user_auth_provider) {
       throw new BadRequestError(
         'Seu cadastro foi feito outra forma tente novamente',
       );
@@ -110,6 +107,7 @@ export class AuthService {
         created_at: user.created_at,
         is_email_verified: user.is_email_verified,
         user_auth_provider: user.user_auth_provider,
+        updated_at: user.updated_at,
       },
       access_token,
     };

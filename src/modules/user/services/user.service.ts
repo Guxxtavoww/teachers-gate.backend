@@ -22,6 +22,7 @@ export class UserService {
       'user.user_email',
       'user.user_type',
       'user.is_email_verified',
+      'user.user_auth_provider',
     ];
 
     const baseQueryBuilder = userRepository

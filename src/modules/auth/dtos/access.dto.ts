@@ -22,6 +22,9 @@ export class UserDTO {
   @ApiProperty({ description: 'The date and time when the user was created' })
   created_at: string;
 
+  @ApiProperty({ description: 'The date and time when the user was updated  ' })
+  updated_at: NullableValue<string>;
+
   // @ApiProperty({ description: 'The phone number of the user', nullable: true })
   // phone_number: NullableValue<string>;
 
