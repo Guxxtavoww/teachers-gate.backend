@@ -12,13 +12,14 @@ import { UnauthorizedInterceptor } from 'src/lib/http-exceptions/errors/intercep
 import { DataSourceInterceptor } from 'src/lib/http-exceptions/errors/interceptors/conctionDataSource.interceptor';
 
 import { AppModule } from './app.module';
+import { allowedDomains } from './config/cors.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   try {
     app.enableCors({
-      origin: ['http://localhost:5000', 'http://localhost:3000'],
+      origin: allowedDomains,
     });
     app.enableShutdownHooks();
     app.setGlobalPrefix('server');

@@ -18,6 +18,7 @@ export const envSchema = z.object({
   JWT_SECRET: stringSchema,
   JWT_EXPIRES_IN: stringSchema,
   PORT: optionalStringToNumberSchema.default('5000'),
+  WEBSOCKET_PORT: optionalStringToNumberSchema.default('80'),
   ENV: z.enum(['prod', 'dev']).default('dev'),
   RESEND_API_KEY: stringSchema,
   EMAIL_FROM: emailStringSchema,
