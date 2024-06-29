@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { type Request } from 'express';
+import type { Request } from 'express';
 
 import { IS_PUBLIC_KEY } from 'src/shared/decorators/auth.decorator';
 import { DECODED_TOKEN_KEY } from 'src/shared/decorators/decoded-token.decorator';
@@ -33,11 +33,13 @@ export class AuthGuard implements CanActivate {
 
     try {
       if (token) {
+        if (request[DECODED_TOKEN_KEY]) return true;
+
         const payload = await this.jwtService.verifyAsync(token, {
           secret: ENV_VARIABLES.JWT_SECRET,
         });
 
-        if (!request[DECODED_TOKEN_KEY]) request[DECODED_TOKEN_KEY] = payload;
+        request[DECODED_TOKEN_KEY] = payload;
       }
 
       return true;
