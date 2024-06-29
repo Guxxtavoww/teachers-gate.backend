@@ -34,11 +34,13 @@ export class ClassroomChatGateway
   async handleConnection(socket: Socket) {
     const token = socket.handshake.auth.token;
 
-    if (!token) return socket.disconnect();
+    // if (!token) return socket.disconnect();
 
     // const verifiedToken: DecodedTokenType = await this.jwtService.verifyAsync(token, {
     //   secret: ENV_VARIABLES.JWT_SECRET,
-    // });    
+    // });
+
+    Logger.log(token)
   }
 
   async handleDisconnect(socket: Socket): Promise<void> {
