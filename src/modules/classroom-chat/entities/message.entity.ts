@@ -4,6 +4,7 @@ import { Base } from 'src/lib/database/entities/base.entity';
 import { ClassroomMember } from 'src/modules/classroom-member/entities/classroom-member.entity';
 
 import { ClassroomChat } from './classroom-chat.entity';
+import type { CreateMessagePayload } from '../dtos/create-message.dto';
 
 @Entity('messages')
 export class Message extends Base {
@@ -28,4 +29,17 @@ export class Message extends Base {
   )
   @JoinColumn({ name: 'message_owner_id' })
   message_owner: ClassroomMember;
+
+  static create(
+    payload: CreateMessagePayload & {
+      classroom_chat_id: string;
+      message_owner_id: string;
+    },
+  ) {
+    const message = new Message();
+
+    Object.assign(message, payload);
+
+    return message;
+  }
 }
