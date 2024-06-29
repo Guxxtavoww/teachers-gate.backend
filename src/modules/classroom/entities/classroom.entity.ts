@@ -13,6 +13,7 @@ import { ClassroomMember } from 'src/modules/classroom-member/entities/classroom
 
 import type { UpdateClassroomPayload } from '../dtos/update-classroom.dto';
 import type { CreateClassroomPayload } from '../dtos/create-classroom.dto';
+import { ClassroomChat } from 'src/modules/classroom-chat/entities/classroom-chat.entity';
 
 @Entity('classrooms')
 export class Classroom extends Base {
@@ -30,11 +31,17 @@ export class Classroom extends Base {
   @Column('int', { default: 0 })
   classroom_member_count: number;
 
+  @OneToMany(() => ClassroomChat, (classroom) => classroom.classroom)
+  classroom_chats: ClassroomChat[];
+
   @ManyToOne(() => User, (user) => user.tutoring_classrooms)
   @JoinColumn({ name: 'teacher_id' })
   teacher: User;
 
-  @OneToMany(() => ClassroomMember, (classroomMember) => classroomMember.classroom)
+  @OneToMany(
+    () => ClassroomMember,
+    (classroomMember) => classroomMember.classroom,
+  )
   members: ClassroomMember[];
 
   static create(payload: CreateClassroomPayload & { teacher_id: string }) {
