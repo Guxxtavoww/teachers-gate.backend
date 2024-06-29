@@ -6,7 +6,7 @@ import { ClassroomService } from 'src/modules/classroom/services/classroom.servi
 import { NotFoundError } from 'src/lib/http-exceptions/errors/types/not-found-error';
 
 import { ClassroomChat } from '../entities/classroom-chat.entity';
-import { classroomChatRepository } from '../repositorys/classroom-chat.repository';
+import { classroomChatRepository } from '../repositories/classroom-chat.repository';
 import type { CreateClassroomChatPayload } from '../dtos/create-classroom-chat.dto';
 import type { UpdateClassroomChatPayload } from '../dtos/update-classroom-chat.dto';
 import type { PaginateClassroomChatsPayload } from '../dtos/paginate-classroom-chats.dto';

@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
 
 import { PaginationService } from 'src/lib/pagination/pagination.service';
+import { ClassroomMemberService } from 'src/modules/classroom-member/services/classroom-member.service';
 
-import type { CreateMessagePayload } from '../dtos/create-message.dto';
-import { ClassroomChatService } from './classroom-chat.service';
 import { Message } from '../entities/message.entity';
+import { ClassroomChatService } from './classroom-chat.service';
+import type { CreateMessagePayload } from '../dtos/create-message.dto';
 
 @Injectable()
 export class MessageService {
   constructor(
     private readonly paginationService: PaginationService,
     private readonly classroomChatService: ClassroomChatService,
+    private readonly classroomMemberService: ClassroomMemberService,
   ) {}
 
   async createMessage(

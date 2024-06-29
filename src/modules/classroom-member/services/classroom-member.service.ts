@@ -4,9 +4,10 @@ import { User } from 'src/modules/user/entities/user.entity';
 import { PaginationService } from 'src/lib/pagination/pagination.service';
 import { Classroom } from 'src/modules/classroom/entities/classroom.entity';
 import { ClassroomService } from 'src/modules/classroom/services/classroom.service';
+import { NotFoundError } from 'src/lib/http-exceptions/errors/types/not-found-error';
 
 import { ClassroomMember } from '../entities/classroom-member.entity';
-import { classroomMemberRepository } from '../repositorys/classroom-member.repository';
+import { classroomMemberRepository } from '../repositories/classroom-member.repository';
 import type { PaginateClassroomMembersPayload } from '../dtos/paginate-classroom-members.dto';
 
 @Injectable()
@@ -39,6 +40,30 @@ export class ClassroomMemberService {
       .leftJoinAndSelect('classroom_member.classroom', 'classroom')
       .leftJoinAndSelect('classroom_member.user', 'user')
       .select(baseColumns);
+  }
+
+  async getMembershipById(id: string) {
+    const membership = await this.createClassroomMemberQueryBuilder()
+      .where('classroom_member.id = :id', { id })
+      .getOne();
+
+    if (!membership) {
+      throw new NotFoundError('Membership not valid');
+    }
+
+    return membership;
+  }
+
+  async getMembershipByUserId(user_id: string) {
+    const membership = await this.createClassroomMemberQueryBuilder()
+      .where('user.id = :user_id', { user_id })
+      .getOne();
+
+    if (!membership) {
+      throw new NotFoundError('Membership not valid');
+    }
+
+    return membership;
   }
 
   async paginateClassroomMembers({
