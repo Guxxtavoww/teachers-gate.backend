@@ -10,6 +10,23 @@ import { ClassroomMember } from '../entities/classroom-member.entity';
 import { classroomMemberRepository } from '../repositories/classroom-member.repository';
 import type { PaginateClassroomMembersPayload } from '../dtos/paginate-classroom-members.dto';
 
+const baseColumns: (
+  | `classroom_member.${keyof ClassroomMember}`
+  | `classroom.${keyof Classroom}`
+  | `user.${keyof User}`
+)[] = [
+  'classroom_member.id',
+  'classroom_member.user_id',
+  'classroom_member.created_at',
+  'classroom_member.updated_at',
+  'classroom.id',
+  'classroom.classroom_member_count',
+  'user.id',
+  'user.user_email',
+  'user.user_type',
+  'user.user_name',
+];
+
 @Injectable()
 export class ClassroomMemberService {
   constructor(
@@ -18,23 +35,6 @@ export class ClassroomMemberService {
   ) {}
 
   private createClassroomMemberQueryBuilder() {
-    const baseColumns: (
-      | `classroom_member.${keyof ClassroomMember}`
-      | `classroom.${keyof Classroom}`
-      | `user.${keyof User}`
-    )[] = [
-      'classroom_member.id',
-      'classroom_member.user_id',
-      'classroom_member.created_at',
-      'classroom_member.updated_at',
-      'classroom.id',
-      'classroom.classroom_member_count',
-      'user.id',
-      'user.user_email',
-      'user.user_type',
-      'user.user_name',
-    ];
-
     return classroomMemberRepository
       .createQueryBuilder('classroom_member')
       .leftJoinAndSelect('classroom_member.classroom', 'classroom')

@@ -5,6 +5,7 @@ import { ClassroomMember } from 'src/modules/classroom-member/entities/classroom
 
 import { ClassroomChat } from './classroom-chat.entity';
 import type { CreateMessagePayload } from '../dtos/create-message.dto';
+import type { UpdateMessagePayload } from '../dtos/update-message.dto';
 
 @Entity('messages')
 export class Message extends Base {
@@ -36,6 +37,14 @@ export class Message extends Base {
       message_owner_id: string;
     },
   ) {
+    const message = new Message();
+
+    Object.assign(message, payload);
+
+    return message;
+  }
+
+  static update(payload: UpdateMessagePayload) {
     const message = new Message();
 
     Object.assign(message, payload);

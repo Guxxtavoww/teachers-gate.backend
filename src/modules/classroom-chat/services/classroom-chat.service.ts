@@ -11,6 +11,20 @@ import type { CreateClassroomChatPayload } from '../dtos/create-classroom-chat.d
 import type { UpdateClassroomChatPayload } from '../dtos/update-classroom-chat.dto';
 import type { PaginateClassroomChatsPayload } from '../dtos/paginate-classroom-chats.dto';
 
+const baseColumns: (
+  | `classroom_chat.${keyof ClassroomChat}`
+  | `classroom.${keyof Classroom}`
+)[] = [
+  'classroom_chat.id',
+  'classroom_chat.chat_name',
+  'classroom_chat.chat_description',
+  'classroom_chat.created_at',
+  'classroom_chat.updated_at',
+  'classroom.id',
+  'classroom.teacher_id',
+  'classroom.classroom_name',
+];
+
 @Injectable()
 export class ClassroomChatService {
   constructor(
@@ -19,20 +33,6 @@ export class ClassroomChatService {
   ) {}
 
   private createClassroomChatQueryBuilder() {
-    const baseColumns: (
-      | `classroom_chat.${keyof ClassroomChat}`
-      | `classroom.${keyof Classroom}`
-    )[] = [
-      'classroom_chat.id',
-      'classroom_chat.chat_name',
-      'classroom_chat.chat_description',
-      'classroom_chat.created_at',
-      'classroom_chat.updated_at',
-      'classroom.id',
-      'classroom.teacher_id',
-      'classroom.classroom_name',
-    ];
-
     return classroomChatRepository
       .createQueryBuilder('classroom_chat')
       .leftJoinAndSelect('classroom_chat.classroom', 'classroom')

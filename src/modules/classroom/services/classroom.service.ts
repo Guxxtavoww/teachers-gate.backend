@@ -12,6 +12,21 @@ import type { CreateClassroomPayload } from '../dtos/create-classroom.dto';
 import type { UpdateClassroomPayload } from '../dtos/update-classroom.dto';
 import type { PaginateClassroomsPayload } from '../dtos/paginate-classrooms.dto';
 
+const base_select: (
+  | `classroom.${keyof Classroom}`
+  | `teacher.${keyof User}`
+)[] = [
+  'classroom.id',
+  'classroom.created_at',
+  'classroom.updated_at',
+  'classroom.classroom_description',
+  'classroom.classroom_name',
+  'classroom.classroom_member_count',
+  'teacher.id',
+  'teacher.user_email',
+  'teacher.user_name',
+];
+
 @Injectable()
 export class ClassroomService {
   constructor(private readonly paginationService: PaginationService) {}
@@ -23,21 +38,6 @@ export class ClassroomService {
   }
 
   private createClassroomQueryBuilder() {
-    const base_select: (
-      | `classroom.${keyof Classroom}`
-      | `teacher.${keyof User}`
-    )[] = [
-      'classroom.id',
-      'classroom.created_at',
-      'classroom.updated_at',
-      'classroom.classroom_description',
-      'classroom.classroom_name',
-      'classroom.classroom_member_count',
-      'teacher.id',
-      'teacher.user_email',
-      'teacher.user_name',
-    ];
-
     return classroomRepository
       .createQueryBuilder('classroom')
       .leftJoinAndSelect('classroom.teacher', 'teacher')
