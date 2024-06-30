@@ -9,5 +9,6 @@ import { ClassroomModule } from '../classroom/classroom.module';
   imports: [ClassroomModule],
   providers: [ClassroomMemberService],
   controllers: [ClassroomMemberController],
+  exports: [ClassroomMemberService],
 })
 export class ClassroomMemberModule {}

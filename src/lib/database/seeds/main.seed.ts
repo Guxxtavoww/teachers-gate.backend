@@ -6,10 +6,15 @@ import {
   runSeeder,
 } from 'typeorm-extension';
 
+import { UserSeeder } from './seeders';
+
 export class MainSeeder implements Seeder {
-  track?: boolean | undefined;
+  track?: boolean | undefined = true;
+
   async run(
     dataSource: DataSource,
     _factoryManager: SeederFactoryManager,
-  ): Promise<void> {}
+  ): Promise<void> {
+    await Promise.all([runSeeder(dataSource, UserSeeder)]);
+  }
 }

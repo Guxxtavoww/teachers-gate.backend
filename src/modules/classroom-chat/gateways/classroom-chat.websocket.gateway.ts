@@ -6,7 +6,7 @@ import {
   WebSocketServer,
   MessageBody,
 } from '@nestjs/websockets';
-import { Logger } from '@nestjs/common';
+import { Inject, Logger, forwardRef } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Socket, Server } from 'socket.io';
 
@@ -25,6 +25,7 @@ export class ClassroomChatGateway
 {
   constructor(
     private readonly classroomChatService: ClassroomChatService,
+    @Inject(forwardRef(() => ClassroomMessageService))
     private readonly messageService: ClassroomMessageService,
     private readonly jwtService: JwtService,
   ) {}
@@ -40,7 +41,7 @@ export class ClassroomChatGateway
     //   secret: ENV_VARIABLES.JWT_SECRET,
     // });
 
-    Logger.log(token)
+    Logger.log(token);
   }
 
   async handleDisconnect(socket: Socket): Promise<void> {

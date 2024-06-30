@@ -1,4 +1,4 @@
-import { Global, Module } from '@nestjs/common';
+import { Global, Module, forwardRef } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 
 import { ClassroomModule } from '../classroom/classroom.module';
@@ -9,7 +9,11 @@ import { ClassroomMessageModule } from '../classroom-message/classroom-message.m
 
 @Global()
 @Module({
-  imports: [JwtModule, ClassroomModule, ClassroomMessageModule],
+  imports: [
+    JwtModule,
+    ClassroomModule,
+    forwardRef(() => ClassroomMessageModule),
+  ],
   controllers: [ClassroomChatController],
   providers: [ClassroomChatGateway, ClassroomChatService],
   exports: [ClassroomChatGateway, ClassroomChatService],
