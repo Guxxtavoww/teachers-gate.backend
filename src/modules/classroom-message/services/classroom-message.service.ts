@@ -2,16 +2,16 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 
 import { PaginationService } from 'src/lib/pagination/pagination.service';
 import { NotFoundError } from 'src/lib/http-exceptions/errors/types/not-found-error';
+import { ClassroomChatService } from 'src/modules/classroom-chat/services/classroom-chat.service';
 import { ClassroomMemberService } from 'src/modules/classroom-member/services/classroom-member.service';
 
-import { Message } from '../entities/message.entity';
-import { ClassroomChatService } from './classroom-chat.service';
-import { messageRepository } from '../repositories/message.repository';
+import { ClassroomMessage } from '../entities/classroom-message.entity';
 import type { CreateMessagePayload } from '../dtos/create-message.dto';
 import type { UpdateMessagePayload } from '../dtos/update-message.dto';
+import { classroomMessageRepository } from '../repositories/classroom-message.repository';
 import type { PaginateClassroomChatMessagesPayload } from '../dtos/paginate-classrooom-chat-messages.dto';
 
-const baseColumns: `message.${keyof Message}`[] = [
+const baseColumns: `message.${keyof ClassroomMessage}`[] = [
   'message.id',
   'message.content',
   'message.created_at',
@@ -21,7 +21,7 @@ const baseColumns: `message.${keyof Message}`[] = [
 ];
 
 @Injectable()
-export class MessageService {
+export class ClassroomMessageService {
   constructor(
     private readonly paginationService: PaginationService,
     private readonly classroomChatService: ClassroomChatService,
@@ -29,7 +29,7 @@ export class MessageService {
   ) {}
 
   private createMessageQueryBuilder() {
-    return messageRepository.createQueryBuilder().select(baseColumns);
+    return classroomMessageRepository.createQueryBuilder().select(baseColumns);
   }
 
   async paginateClassroomChatMessages(
@@ -94,13 +94,13 @@ export class MessageService {
 
     if (!membership) throw new NotFoundError('Not a part of this classroom');
 
-    const messageToCreate = Message.create({
+    const messageToCreate = ClassroomMessage.create({
       classroom_chat_id: chat.id,
       message_owner_id: membership.user.id,
       ...payload,
     });
 
-    return messageRepository.save(messageToCreate);
+    return classroomMessageRepository.save(messageToCreate);
   }
 
   private checkPermission(message_owner_id: string, logged_in_user_id: string) {
@@ -120,9 +120,9 @@ export class MessageService {
 
     this.checkPermission(messageToUpdate.message_owner_id, logged_in_user_id);
 
-    const message = Message.update(payload);
+    const message = ClassroomMessage.update(payload);
 
-    return messageRepository.update(messageToUpdate.id, message);
+    return classroomMessageRepository.update(messageToUpdate.id, message);
   }
 
   async deleteMessage(id: string, logged_in_user_id: string) {
@@ -130,6 +130,6 @@ export class MessageService {
 
     this.checkPermission(messageToDelete.message_owner_id, logged_in_user_id);
 
-    return messageRepository.remove(messageToDelete);
+    return classroomMessageRepository.remove(messageToDelete);
   }
 }

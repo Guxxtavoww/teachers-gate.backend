@@ -10,7 +10,7 @@ import {
 import { Base } from 'src/lib/database/entities/base.entity';
 import { User } from 'src/modules/user/entities/user.entity';
 import { Classroom } from 'src/modules/classroom/entities/classroom.entity';
-import { Message } from 'src/modules/classroom-chat/entities/message.entity';
+import { ClassroomMessage } from 'src/modules/classroom-message/entities/classroom-message.entity';
 
 @Entity('classroom-members')
 export class ClassroomMember extends Base {
@@ -30,8 +30,8 @@ export class ClassroomMember extends Base {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @OneToMany(() => Message, (message) => message.message_owner)
-  sended_messages: Message[];
+  @OneToMany(() => ClassroomMessage, (message) => message.message_owner)
+  sended_messages: ClassroomMessage[];
 
   static create(user_id: string, classroom_id: string) {
     const classroomMember = new ClassroomMember();

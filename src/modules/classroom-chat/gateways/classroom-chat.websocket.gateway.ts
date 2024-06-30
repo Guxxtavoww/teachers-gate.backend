@@ -12,8 +12,8 @@ import { Socket, Server } from 'socket.io';
 
 import { ENV_VARIABLES } from 'src/config/env.config';
 import { allowedDomains } from 'src/config/cors.config';
+import { ClassroomMessageService } from 'src/modules/classroom-message/services/classroom-message.service';
 
-import { MessageService } from '../services/message.service';
 import { ClassroomChatService } from '../services/classroom-chat.service';
 
 @WebSocketGateway(ENV_VARIABLES.WEBSOCKET_PORT, {
@@ -25,7 +25,7 @@ export class ClassroomChatGateway
 {
   constructor(
     private readonly classroomChatService: ClassroomChatService,
-    private readonly messageService: MessageService,
+    private readonly messageService: ClassroomMessageService,
     private readonly jwtService: JwtService,
   ) {}
 

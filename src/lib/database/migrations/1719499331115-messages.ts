@@ -12,7 +12,7 @@ export class Messages1719499331115 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'messages',
+        name: 'classroom-messages',
         columns: [
           ...baseColumns,
           {
@@ -33,7 +33,7 @@ export class Messages1719499331115 implements MigrationInterface {
     );
 
     await queryRunner.createIndex(
-      'messages',
+      'classroom-messages',
       new TableIndex({
         name: 'IDX_CLASSROOM_CHAT_ID',
         columnNames: ['classroom_chat_id'],
@@ -41,7 +41,7 @@ export class Messages1719499331115 implements MigrationInterface {
     );
 
     await queryRunner.createIndex(
-      'messages',
+      'classroom-messages',
       new TableIndex({
         name: 'IDX_MESSAGE_OWNER_ID',
         columnNames: ['message_owner_id'],
@@ -49,7 +49,7 @@ export class Messages1719499331115 implements MigrationInterface {
     );
 
     await queryRunner.createForeignKey(
-      'messages',
+      'classroom-messages',
       new TableForeignKey({
         columnNames: ['classroom_chat_id'],
         referencedColumnNames: ['id'],
@@ -59,7 +59,7 @@ export class Messages1719499331115 implements MigrationInterface {
     );
 
     await queryRunner.createForeignKey(
-      'messages',
+      'classroom-messages',
       new TableForeignKey({
         columnNames: ['message_owner_id'],
         referencedColumnNames: ['id'],
@@ -70,7 +70,7 @@ export class Messages1719499331115 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    const table = (await queryRunner.getTable('messages')) as Table;
+    const table = (await queryRunner.getTable('classroom-messages')) as Table;
 
     const foreignKeyChat = table.foreignKeys.find(
       (fk) => fk.columnNames.indexOf('classroom_chat_id') !== -1,
@@ -80,10 +80,10 @@ export class Messages1719499331115 implements MigrationInterface {
       (fk) => fk.columnNames.indexOf('message_owner_id') !== -1,
     ) as TableForeignKey;
 
-    await queryRunner.dropForeignKey('messages', foreignKeyChat);
-    await queryRunner.dropForeignKey('messages', foreignKeyOwner);
-    await queryRunner.dropIndex('messages', 'IDX_CLASSROOM_CHAT_ID');
-    await queryRunner.dropIndex('messages', 'IDX_MESSAGE_OWNER_ID');
-    await queryRunner.dropTable('messages');
+    await queryRunner.dropForeignKey('classroom-messages', foreignKeyChat);
+    await queryRunner.dropForeignKey('classroom-messages', foreignKeyOwner);
+    await queryRunner.dropIndex('classroom-messages', 'IDX_CLASSROOM_CHAT_ID');
+    await queryRunner.dropIndex('classroom-messages', 'IDX_MESSAGE_OWNER_ID');
+    await queryRunner.dropTable('classroom-messages');
   }
 }

@@ -1,13 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 
-import { ClassroomService } from '../classroom/services/classroom.service';
 import { ClassroomMemberService } from './services/classroom-member.service';
-import { ClassroomChatModule } from '../classroom-chat/classroom-chat.module';
-import { ClassroomChatController } from '../classroom-chat/controllers/classroom-chat.controller';
+import { ClassroomMemberController } from './controllers/classroom-member.controller';
+import { ClassroomModule } from '../classroom/classroom.module';
 
+@Global()
 @Module({
-  imports: [ClassroomChatModule, ClassroomService],
+  imports: [ClassroomModule],
   providers: [ClassroomMemberService],
-  controllers: [ClassroomChatController],
+  controllers: [ClassroomMemberController],
 })
 export class ClassroomMemberModule {}

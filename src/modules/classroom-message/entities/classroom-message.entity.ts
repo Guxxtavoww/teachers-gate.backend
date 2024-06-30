@@ -1,14 +1,14 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 
 import { Base } from 'src/lib/database/entities/base.entity';
+import { ClassroomChat } from 'src/modules/classroom-chat/entities/classroom-chat.entity';
 import { ClassroomMember } from 'src/modules/classroom-member/entities/classroom-member.entity';
 
-import { ClassroomChat } from './classroom-chat.entity';
 import type { CreateMessagePayload } from '../dtos/create-message.dto';
 import type { UpdateMessagePayload } from '../dtos/update-message.dto';
 
-@Entity('messages')
-export class Message extends Base {
+@Entity('classroom-messages')
+export class ClassroomMessage extends Base {
   @Column('varchar')
   content: string;
 
@@ -37,7 +37,7 @@ export class Message extends Base {
       message_owner_id: string;
     },
   ) {
-    const message = new Message();
+    const message = new ClassroomMessage();
 
     Object.assign(message, payload);
 
@@ -45,7 +45,7 @@ export class Message extends Base {
   }
 
   static update(payload: UpdateMessagePayload) {
-    const message = new Message();
+    const message = new ClassroomMessage();
 
     Object.assign(message, payload);
 

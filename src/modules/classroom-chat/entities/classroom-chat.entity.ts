@@ -2,8 +2,8 @@ import { Column, Entity, Index, ManyToOne, OneToMany } from 'typeorm';
 
 import { Base } from 'src/lib/database/entities/base.entity';
 import { Classroom } from 'src/modules/classroom/entities/classroom.entity';
+import { ClassroomMessage } from 'src/modules/classroom-message/entities/classroom-message.entity';
 
-import { Message } from './message.entity';
 import type { CreateClassroomChatPayload } from '../dtos/create-classroom-chat.dto';
 import type { UpdateClassroomChatPayload } from '../dtos/update-classroom-chat.dto';
 
@@ -23,8 +23,8 @@ export class ClassroomChat extends Base {
   @ManyToOne(() => Classroom, (classroom) => classroom.classroom_chats)
   classroom: Classroom;
 
-  @OneToMany(() => Message, (message) => message.classroom_chat)
-  chat_messages: Message[];
+  @OneToMany(() => ClassroomMessage, (message) => message.classroom_chat)
+  chat_messages: ClassroomMessage[];
 
   static create(payload: CreateClassroomChatPayload) {
     const classroomChat = new ClassroomChat();
