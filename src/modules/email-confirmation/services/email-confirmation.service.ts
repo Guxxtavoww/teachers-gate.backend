@@ -45,11 +45,11 @@ export class EmailConfirmationService {
   }
 
   async confirmEmail(payload: ConfirmEmailPayload, logged_in_user_id: string) {
-    const verifiedToken = await this.jwtService.verifyAsync(payload.token, {
-      secret: ENV_VARIABLES.JWT_SECRET,
-    });
-
     try {
+      const verifiedToken = await this.jwtService.verifyAsync(payload.token, {
+        secret: ENV_VARIABLES.JWT_SECRET,
+      });
+
       const parsedToken = await parsedTokenSchema.parseAsync(verifiedToken);
 
       return this.userService.markEmailAsConfirmed(
