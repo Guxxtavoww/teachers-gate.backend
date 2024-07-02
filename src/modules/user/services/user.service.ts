@@ -4,7 +4,7 @@ import { PaginationService } from 'src/lib/pagination/pagination.service';
 import { NotFoundError } from 'src/lib/http-exceptions/errors/types/not-found-error';
 
 import { User } from '../entities/user.entity';
-import { userRepository } from '../repositorys/user.repository';
+import { userRepository } from '../repositories/user.repository';
 import type { CreateUserPayload } from '../dtos/create-user.dto';
 import type { UpdateUserPayload } from '../dtos/update-user.dto';
 import type { PaginateUsersPayload } from '../dtos/paginate-users.dto';
