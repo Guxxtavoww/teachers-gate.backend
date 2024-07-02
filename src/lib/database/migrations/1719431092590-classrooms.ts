@@ -29,7 +29,7 @@ export class Classrooms1719431092590 implements MigrationInterface {
             type: 'uuid',
           },
           {
-            name: 'classroom_student_count',
+            name: 'classroom_member_count',
             type: 'int',
             default: 0,
           },

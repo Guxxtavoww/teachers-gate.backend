@@ -34,18 +34,22 @@ export class ClassroomChatGateway
   @WebSocketServer() server: Server;
 
   async handleConnection(socket: Socket) {
-    const token = socket.handshake.auth.token;
+    try {
+      const token = socket.handshake.auth.token;
 
-    if (!token) return socket.disconnect();
+      if (!token) return socket.disconnect();
 
-    const verifiedToken: DecodedTokenType = await this.jwtService.verifyAsync(
-      token,
-      {
-        secret: ENV_VARIABLES.JWT_SECRET,
-      },
-    );
+      const verifiedToken: DecodedTokenType = await this.jwtService.verifyAsync(
+        token,
+        {
+          secret: ENV_VARIABLES.JWT_SECRET,
+        },
+      );
 
-    Logger.log(`Connected as: ${verifiedToken.email}`);
+      Logger.log(`Connected as: ${verifiedToken.email}`);
+    } catch {
+      return socket.disconnect();
+    }
   }
 
   async handleDisconnect(socket: Socket): Promise<void> {

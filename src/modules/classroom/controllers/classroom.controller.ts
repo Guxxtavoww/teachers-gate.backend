@@ -12,6 +12,7 @@ import {
 import { UuidParam } from 'src/shared/decorators/uuid-param.decorator';
 import { DecodedToken } from 'src/shared/decorators/decoded-token.decorator';
 import { ApiPaginationQuery } from 'src/shared/decorators/api-pagination-query.decorator';
+import { DataBaseInterceptorDecorator } from 'src/shared/decorators/database-interceptor.decorator';
 
 import { ClassroomService } from '../services/classroom.service';
 import { CreateClassroomDTO } from '../dtos/create-classroom.dto';
@@ -30,6 +31,7 @@ export class ClassroomController {
   }
 
   @Post()
+  @DataBaseInterceptorDecorator()
   create(
     @DecodedToken() decoded_token: DecodedTokenType,
     @Body() payload: CreateClassroomDTO,
