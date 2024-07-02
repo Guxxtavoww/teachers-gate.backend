@@ -46,7 +46,7 @@ export class ClassroomChatGateway
         },
       );
 
-      Logger.log(`Connected as: ${verifiedToken.email}`);
+      Logger.log(`Connected as id: ${verifiedToken.id}`);
     } catch {
       return socket.disconnect();
     }

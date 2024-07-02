@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 
 import { User } from 'src/modules/user/entities/user.entity';
 import { UserTypeEnum } from 'src/modules/user/enums/user-type.enum';
+import { UserService } from 'src/modules/user/services/user.service';
 import { PaginationService } from 'src/lib/pagination/pagination.service';
 import { NotFoundError } from 'src/lib/http-exceptions/errors/types/not-found-error';
 import { BadRequestError } from 'src/lib/http-exceptions/errors/types/bad-request-error';
@@ -29,7 +30,10 @@ const base_select: (
 
 @Injectable()
 export class ClassroomService {
-  constructor(private readonly paginationService: PaginationService) {}
+  constructor(
+    private readonly paginationService: PaginationService,
+    private readonly userService: UserService,
+  ) {}
 
   private checkPermission(logged_in_user_id: string, teacher_id: string) {
     if (logged_in_user_id !== teacher_id) {
@@ -102,7 +106,9 @@ export class ClassroomService {
     logged_in_user: DecodedTokenType,
     payload: CreateClassroomPayload,
   ) {
-    if (logged_in_user.user_type !== UserTypeEnum.TEACHER) {
+    const { user_type } = await this.userService.getUserById(logged_in_user.id);
+
+    if (user_type !== UserTypeEnum.TEACHER) {
       throw new ForbiddenException(
         'Only teachers are allowed to create classrooms',
       );
