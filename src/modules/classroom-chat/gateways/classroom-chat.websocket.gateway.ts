@@ -14,6 +14,7 @@ import { ENV_VARIABLES } from 'src/config/env.config';
 import { allowedDomains } from 'src/config/cors.config';
 import { ClassroomMessageService } from 'src/modules/classroom-message/services/classroom-message.service';
 
+import { MessageBodyDTO } from '../dtos/message-body.dto';
 import { ClassroomChatService } from '../services/classroom-chat.service';
 
 @WebSocketGateway(ENV_VARIABLES.WEBSOCKET_PORT, {
@@ -35,13 +36,16 @@ export class ClassroomChatGateway
   async handleConnection(socket: Socket) {
     const token = socket.handshake.auth.token;
 
-    // if (!token) return socket.disconnect();
+    if (!token) return socket.disconnect();
 
-    // const verifiedToken: DecodedTokenType = await this.jwtService.verifyAsync(token, {
-    //   secret: ENV_VARIABLES.JWT_SECRET,
-    // });
+    const verifiedToken: DecodedTokenType = await this.jwtService.verifyAsync(
+      token,
+      {
+        secret: ENV_VARIABLES.JWT_SECRET,
+      },
+    );
 
-    Logger.log(token);
+    Logger.log(`Connected as: ${verifiedToken.email}`);
   }
 
   async handleDisconnect(socket: Socket): Promise<void> {
@@ -50,7 +54,7 @@ export class ClassroomChatGateway
   }
 
   @SubscribeMessage('message')
-  handleMessage(@MessageBody() message: string): void {
-    Logger.log(message);
+  handleMessage(@MessageBody() payload: MessageBodyDTO): void {
+    Logger.log(payload);
   }
 }
