@@ -44,6 +44,8 @@ export class AuthGuard implements CanActivate {
 
       return true;
     } catch {
+      request[DECODED_TOKEN_KEY] = undefined;
+
       throw new UnauthorizedException('Invalid Token!');
     }
   }

@@ -88,10 +88,6 @@ export class AuthService {
   private async generateAccessToken(user: User): Promise<string> {
     const { access_token } = await this.getAccessToken({
       id: user.id,
-      email: user.user_email,
-      name: user.user_name,
-      user_type: user.user_type,
-      user_auth_provider: user.user_auth_provider,
     });
 
     return access_token;
