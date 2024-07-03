@@ -37,7 +37,7 @@ declare global {
 
   export type PaginationArgs<T extends Record<string, any> = object> = T &
     Omit<IPaginationOptions, 'limit' | 'page'> & {
-      limit?: string | number;
-      page?: string | number;
+      limit: number;
+      page: number;
     };
 }

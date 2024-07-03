@@ -23,8 +23,8 @@ export class PaginationService {
       entityRepository,
       {
         ...options,
-        limit: limit || 10,
-        page: page || 1,
+        limit,
+        page,
       },
       searchOptions,
     );
@@ -36,8 +36,8 @@ export class PaginationService {
   ): Promise<Pagination<T, IPaginationMeta>> {
     return paginate<T>(queryBuilder, {
       ...options,
-      limit: limit || 10,
-      page: page || 1,
+      limit,
+      page,
     });
   }
 }
