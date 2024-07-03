@@ -19,13 +19,12 @@ export class MailService {
 
     Logger.log(payload.to);
 
+    const isProd = ENV_VARIABLES.ENV === 'prod';
+
     const { data, error } = await this.resend.emails.send({
       from: 'Contact Form <onboarding@resend.dev>',
       subject: payload.subject,
-      to:
-        ENV_VARIABLES.ENV === 'prod'
-          ? 'gustavoaugustocarcontato@gmail.com'
-          : payload.to,
+      to: isProd ? 'gustavoaugustocarcontato@gmail.com' : payload.to,
       reply_to: ENV_VARIABLES.EMAIL_FROM,
       html: htmlContent,
     });

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { ENV_VARIABLES } from 'src/config/env.config';
@@ -30,6 +30,8 @@ export class EmailConfirmationService {
         expiresIn: '2h',
       },
     );
+
+    if (ENV_VARIABLES.ENV !== 'prod') Logger.log({ token });
 
     const url = new URL(ENV_VARIABLES.EMAIL_CONFIRMATION_URL);
 
