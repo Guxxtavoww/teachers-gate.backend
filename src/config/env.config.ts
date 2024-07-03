@@ -23,7 +23,7 @@ export const envSchema = z.object({
   RESEND_API_KEY: stringSchema,
   EMAIL_FROM: emailStringSchema,
   EMAIL_CONFIRMATION_URL: optionalUrlStringSchema.default(
-    'http://localhost:3000/user/confirm-email',
+    'http://localhost:3000/account/confirm-email',
   ),
 });
 

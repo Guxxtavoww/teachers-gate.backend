@@ -15,7 +15,6 @@ import { allowedDomains } from 'src/config/cors.config';
 import { ClassroomMessageService } from 'src/modules/classroom-message/services/classroom-message.service';
 
 import { MessageBodyDTO } from '../dtos/message-body.dto';
-import { ClassroomChatService } from '../services/classroom-chat.service';
 
 @WebSocketGateway(ENV_VARIABLES.WEBSOCKET_PORT, {
   namespace: 'classroom-chat',
@@ -25,7 +24,6 @@ export class ClassroomChatGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(
-    private readonly classroomChatService: ClassroomChatService,
     @Inject(forwardRef(() => ClassroomMessageService))
     private readonly messageService: ClassroomMessageService,
     private readonly jwtService: JwtService,
@@ -58,7 +56,13 @@ export class ClassroomChatGateway
   }
 
   @SubscribeMessage('message')
-  handleMessage(@MessageBody() payload: MessageBodyDTO): void {
-    Logger.log(payload);
+  async handleMessage(@MessageBody() payload: MessageBodyDTO) {
+    const savedMessage = await this.messageService.sendMessage(
+      payload.classroom_chat_id,
+      payload.user_id,
+      { content: payload.content },
+    );
+
+    return this.server.emit('new-message', savedMessage);
   }
 }
