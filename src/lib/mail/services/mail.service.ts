@@ -18,7 +18,7 @@ export class MailService {
     const htmlContent = this.generateEmailHtml(payload.message);
 
     const { data, error } = await this.resend.emails.send({
-      from: ENV_VARIABLES.EMAIL_FROM,
+      from: 'Contact Form <onboarding@resend.dev>',
       subject: payload.subject,
       to: payload.to,
       reply_to: ENV_VARIABLES.EMAIL_FROM,
