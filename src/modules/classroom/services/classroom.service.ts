@@ -55,6 +55,7 @@ export class ClassroomService {
     order_by_updated_at,
     classroom_name,
     teacher_id,
+    order_by_most_members,
   }: PaginateClassroomsPayload) {
     const queryBuilder = this.createClassroomQueryBuilder()
       .where(
@@ -72,6 +73,9 @@ export class ClassroomService {
 
     if (order_by_updated_at)
       queryBuilder.orderBy('classroom.updated_at', order_by_updated_at);
+
+    if (order_by_most_members)
+      queryBuilder.orderBy('classroom.classroom_member_count', order_by_most_members)
 
     return this.paginationService.paginateWithQueryBuilder(queryBuilder, {
       page,

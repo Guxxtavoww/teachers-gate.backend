@@ -30,6 +30,11 @@ export class ClassroomController {
     return this.classroomService.paginateClassrooms(querys);
   }
 
+  @Get(':id')
+  getOne(@UuidParam('id') id: string) {
+    return this.classroomService.getClassroomById(id);
+  }
+
   @Post()
   @DataBaseInterceptorDecorator()
   create(
