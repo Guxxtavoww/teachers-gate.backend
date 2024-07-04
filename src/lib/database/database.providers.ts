@@ -16,7 +16,7 @@ export const migrationsPath = path.resolve(
   '../../lib/database/migrations/{*.ts,*.js}',
 );
 
-const hasDatabaseHost = ENV_VARIABLES.DATABASE_HOST === 'localhost';
+const isLocal = ENV_VARIABLES.DATABASE_HOST === 'localhost';
 
 const options: DataSourceOptions & SeederOptions = {
   type: 'postgres',
@@ -28,7 +28,8 @@ const options: DataSourceOptions & SeederOptions = {
   entities: [entitiesPath],
   migrations: [migrationsPath],
   synchronize: false,
-  logging: hasDatabaseHost,
+  logging: isLocal,
+  ssl: !isLocal,
   seeds: [MainSeeder],
 };
 

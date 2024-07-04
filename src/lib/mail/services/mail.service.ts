@@ -17,10 +17,14 @@ export class MailService {
   async sendEmail(payload: SendEmailDTO): Promise<string | undefined> {
     const htmlContent = this.generateEmailHtml(payload.message);
 
+    Logger.log(payload.to);
+
+    const isProd = ENV_VARIABLES.ENV === 'prod';
+
     const { data, error } = await this.resend.emails.send({
-      from: ENV_VARIABLES.EMAIL_FROM,
+      from: 'Contact Form <onboarding@resend.dev>',
       subject: payload.subject,
-      to: payload.to,
+      to: isProd ? 'gustavoaugustocarcontato@gmail.com' : payload.to,
       reply_to: ENV_VARIABLES.EMAIL_FROM,
       html: htmlContent,
     });
