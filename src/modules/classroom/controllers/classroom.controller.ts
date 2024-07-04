@@ -41,9 +41,9 @@ export class ClassroomController {
     return this.classroomService.getClassroomById(id, decoded_token.id);
   }
 
-  @Get('your-classrooms')
-  getAll(@DecodedToken() decoded_token: DecodedTokenType) {
-    return this.classroomService.getYourClassroomOptions(decoded_token.id);
+  @Get('options/:user_id')
+  getAll(@UuidParam('user_id') user_id: string) {
+    return this.classroomService.getClassroomOptions(user_id);
   }
 
   @Post()
