@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, forwardRef, Inject, Injectable } from '@nestjs/common';
 
 import { User } from 'src/modules/user/entities/user.entity';
 import { PaginationService } from 'src/lib/pagination/pagination.service';
@@ -30,11 +30,12 @@ const baseColumns: (
 @Injectable()
 export class ClassroomMemberService {
   constructor(
+    @Inject(forwardRef(() => ClassroomService))
     private readonly classroomService: ClassroomService,
     private readonly paginationService: PaginationService,
   ) {}
 
-  private createClassroomMemberQueryBuilder() {
+  createClassroomMemberQueryBuilder() {
     return classroomMemberRepository
       .createQueryBuilder('classroom_member')
       .leftJoinAndSelect('classroom_member.classroom', 'classroom')

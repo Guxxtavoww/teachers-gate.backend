@@ -26,13 +26,19 @@ export class ClassroomController {
 
   @Get('paginate')
   @ApiPaginationQuery()
-  paginate(@Query() querys: PaginateClassroomsDTO) {
-    return this.classroomService.paginateClassrooms(querys);
+  paginate(
+    @Query() querys: PaginateClassroomsDTO,
+    @DecodedToken() decoded_token: DecodedTokenType,
+  ) {
+    return this.classroomService.paginateClassrooms(querys, decoded_token.id);
   }
 
   @Get(':id')
-  getOne(@UuidParam('id') id: string) {
-    return this.classroomService.getClassroomById(id);
+  getOne(
+    @UuidParam('id') id: string,
+    @DecodedToken() decoded_token: DecodedTokenType,
+  ) {
+    return this.classroomService.getClassroomById(id, decoded_token.id);
   }
 
   @Post()

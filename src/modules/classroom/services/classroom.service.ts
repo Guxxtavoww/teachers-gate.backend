@@ -1,4 +1,9 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 
 import { User } from 'src/modules/user/entities/user.entity';
 import { UserTypeEnum } from 'src/modules/user/enums/user-type.enum';
@@ -6,6 +11,7 @@ import { UserService } from 'src/modules/user/services/user.service';
 import { PaginationService } from 'src/lib/pagination/pagination.service';
 import { NotFoundError } from 'src/lib/http-exceptions/errors/types/not-found-error';
 import { BadRequestError } from 'src/lib/http-exceptions/errors/types/bad-request-error';
+import { ClassroomMemberService } from 'src/modules/classroom-member/services/classroom-member.service';
 
 import { Classroom } from '../entities/classroom.entity';
 import { classroomRepository } from '../repositorys/classroom.repository';
@@ -33,6 +39,8 @@ export class ClassroomService {
   constructor(
     private readonly paginationService: PaginationService,
     private readonly userService: UserService,
+    @Inject(forwardRef(() => ClassroomMemberService))
+    private readonly classroomMemberService: ClassroomMemberService,
   ) {}
 
   private checkPermission(logged_in_user_id: string, teacher_id: string) {
@@ -48,15 +56,18 @@ export class ClassroomService {
       .select(base_select);
   }
 
-  async paginateClassrooms({
-    limit,
-    page,
-    order_by_created_at,
-    order_by_updated_at,
-    classroom_name,
-    teacher_id,
-    order_by_most_members,
-  }: PaginateClassroomsPayload) {
+  async paginateClassrooms(
+    {
+      limit,
+      page,
+      order_by_created_at,
+      order_by_updated_at,
+      classroom_name,
+      teacher_id,
+      order_by_most_members,
+    }: PaginateClassroomsPayload,
+    logged_in_user_id: string,
+  ) {
     const queryBuilder = this.createClassroomQueryBuilder()
       .where(
         classroom_name
@@ -75,12 +86,43 @@ export class ClassroomService {
       queryBuilder.orderBy('classroom.updated_at', order_by_updated_at);
 
     if (order_by_most_members)
-      queryBuilder.orderBy('classroom.classroom_member_count', order_by_most_members)
+      queryBuilder.orderBy(
+        'classroom.classroom_member_count',
+        order_by_most_members,
+      );
 
-    return this.paginationService.paginateWithQueryBuilder(queryBuilder, {
-      page,
-      limit,
-    });
+    const paginationResult =
+      await this.paginationService.paginateWithQueryBuilder(queryBuilder, {
+        page,
+        limit,
+      });
+
+    if (!paginationResult.items.length) return paginationResult;
+
+    const { items, meta } = paginationResult;
+
+    const clasrooms_ids = items.map((clasroom) => clasroom.id);
+
+    const classroomsMembers = await this.classroomMemberService
+      .createClassroomMemberQueryBuilder()
+      .where('classroom.id IN (:...clasrooms_ids)', { clasrooms_ids })
+      .andWhere('user.id = :logged_in_user_id', { logged_in_user_id })
+      .take(clasrooms_ids.length)
+      .getMany();
+
+    const classroomMembersIds = new Set(
+      classroomsMembers.map(
+        (classroomsMember) => classroomsMember.classroom.id,
+      ),
+    );
+
+    return {
+      items: items.map((classroom) => ({
+        ...classroom,
+        is_current_user_member: classroomMembersIds.has(classroom.id),
+      })),
+      meta,
+    };
   }
 
   async handleClassroomStudentCount(classroom: Classroom, type: CountHandler) {
@@ -94,13 +136,23 @@ export class ClassroomService {
     });
   }
 
-  async getClassroomById(id: string) {
+  async getClassroomById(id: string, logged_in_user_id?: string) {
     const classroom = await this.createClassroomQueryBuilder()
       .where('classroom.id = :id', { id })
       .getOne();
 
     if (!classroom) {
       throw new NotFoundError('Classroom not founded!');
+    }
+
+    if (logged_in_user_id) {
+      const is_current_user_member =
+        !!(await this.classroomMemberService.getMemberByUserIdAndClassroomId(
+          logged_in_user_id,
+          classroom.id,
+        ));
+
+      return { ...classroom, is_current_user_member };
     }
 
     return classroom;
