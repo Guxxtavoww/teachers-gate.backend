@@ -60,7 +60,10 @@ export class ClassroomChatService {
     page,
   }: PaginateClassroomChatsPayload) {
     const queryBuilder = this.createClassroomChatQueryBuilder()
-      .where(
+      .where(classroom_id ? 'classroom.id = :classroom_id' : '1=1', {
+        classroom_id,
+      })
+      .andWhere(
         chat_name ? 'LOWER(classroom_chat.chat_name) LIKE :chat_name' : '1=1',
         {
           chat_name: `%${chat_name}%`,
@@ -73,10 +76,7 @@ export class ClassroomChatService {
         {
           chat_description: `%${chat_description}%`,
         },
-      )
-      .andWhere(classroom_id ? 'classroom.id = :classroom_id' : '1=1', {
-        classroom_id,
-      });
+      );
 
     if (order_by_created_at)
       queryBuilder.orderBy('classroom_chat.created_at', order_by_created_at);

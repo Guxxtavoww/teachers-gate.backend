@@ -56,6 +56,17 @@ export class ClassroomService {
       .select(base_select);
   }
 
+  async getYourClassroomOptions(logged_in_user_id: string) {
+    const options = await classroomRepository.find({
+      select: ['id', 'classroom_name', 'teacher_id'],
+      where: {
+        teacher_id: logged_in_user_id,
+      },
+    });
+
+    return options;
+  }
+
   async paginateClassrooms(
     {
       limit,

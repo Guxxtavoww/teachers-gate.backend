@@ -1,4 +1,11 @@
-import { Column, Entity, Index, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 
 import { Base } from 'src/lib/database/entities/base.entity';
 import { Classroom } from 'src/modules/classroom/entities/classroom.entity';
@@ -21,6 +28,7 @@ export class ClassroomChat extends Base {
   classroom_id: string;
 
   @ManyToOne(() => Classroom, (classroom) => classroom.classroom_chats)
+  @JoinColumn({ name: 'classroom_id' })
   classroom: Classroom;
 
   @OneToMany(() => ClassroomMessage, (message) => message.classroom_chat)

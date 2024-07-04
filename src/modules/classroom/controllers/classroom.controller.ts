@@ -41,6 +41,11 @@ export class ClassroomController {
     return this.classroomService.getClassroomById(id, decoded_token.id);
   }
 
+  @Get('your-classrooms')
+  getAll(@DecodedToken() decoded_token: DecodedTokenType) {
+    return this.classroomService.getYourClassroomOptions(decoded_token.id);
+  }
+
   @Post()
   @DataBaseInterceptorDecorator()
   create(
