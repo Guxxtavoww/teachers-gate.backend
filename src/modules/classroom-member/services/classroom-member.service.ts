@@ -16,7 +16,6 @@ const baseColumns: (
   | `user.${keyof User}`
 )[] = [
   'classroom_member.id',
-  'classroom_member.user_id',
   'classroom_member.created_at',
   'classroom_member.updated_at',
   'classroom.id',

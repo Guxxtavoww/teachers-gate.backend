@@ -3,6 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { UuidParam } from 'src/shared/decorators/uuid-param.decorator';
 import { DecodedToken } from 'src/shared/decorators/decoded-token.decorator';
+import { ApiPaginationQuery } from 'src/shared/decorators/api-pagination-query.decorator';
 
 import { ClassroomMemberService } from '../services/classroom-member.service';
 import { PaginateClassroomMembersDTO } from '../dtos/paginate-classroom-members.dto';
@@ -15,6 +16,7 @@ export class ClassroomMemberController {
   ) {}
 
   @Get('paginate')
+  @ApiPaginationQuery()
   paginate(@Query() querys: PaginateClassroomMembersDTO) {
     return this.classroomMemberService.paginateClassroomMembers(querys);
   }
