@@ -24,6 +24,7 @@ const baseColumns: (
   'classroom_member.created_at',
   'classroom_member.updated_at',
   'classroom.id',
+  'classroom.classroom_name',
   'classroom.classroom_member_count',
   'user.id',
   'user.user_email',
