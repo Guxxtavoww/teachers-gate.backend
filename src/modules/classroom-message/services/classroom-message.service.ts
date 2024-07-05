@@ -28,13 +28,15 @@ export class ClassroomMessageService {
     private readonly classroomMemberService: ClassroomMemberService,
   ) {}
 
+  private wasValidated = false;
+
   private createMessageQueryBuilder() {
     return classroomMessageRepository.createQueryBuilder().select(baseColumns);
   }
 
   async paginateClassroomChatMessages(
     {
-      classromm_chat_id,
+      classroom_chat_id,
       limit,
       page,
       order_by_created_at,
@@ -44,7 +46,7 @@ export class ClassroomMessageService {
   ) {
     const queryBuilder = this.createMessageQueryBuilder().where(
       'message.classroom_chat_id = :classroom_chat_id',
-      { classromm_chat_id },
+      { classroom_chat_id },
     );
 
     if (order_by_created_at)
@@ -83,20 +85,32 @@ export class ClassroomMessageService {
     logged_in_user_id: string,
     payload: CreateMessagePayload,
   ) {
-    const chat =
-      await this.classroomChatService.getClassroomChatById(classroom_chat_id);
+    if (!this.wasValidated) {
+      const chat =
+        await this.classroomChatService.getClassroomChatById(classroom_chat_id);
 
-    const membership =
-      await this.classroomMemberService.getMemberByUserIdAndClassroomId(
-        logged_in_user_id,
-        chat.classroom.id,
-      );
+      const membership =
+        await this.classroomMemberService.getMemberByUserIdAndClassroomId(
+          logged_in_user_id,
+          chat.classroom.id,
+        );
 
-    if (!membership) throw new NotFoundError('Not a part of this classroom');
+      if (!membership) throw new NotFoundError('Not a part of this classroom');
+
+      const messageToCreate = ClassroomMessage.create({
+        classroom_chat_id: chat.id,
+        message_owner_id: membership.user.id,
+        ...payload,
+      });
+
+      this.wasValidated = true;
+
+      return classroomMessageRepository.save(messageToCreate);
+    }
 
     const messageToCreate = ClassroomMessage.create({
-      classroom_chat_id: chat.id,
-      message_owner_id: membership.user.id,
+      classroom_chat_id,
+      message_owner_id: logged_in_user_id,
       ...payload,
     });
 

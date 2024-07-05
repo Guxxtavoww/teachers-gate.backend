@@ -4,6 +4,7 @@ import { PaginationService } from 'src/lib/pagination/pagination.service';
 import { NotFoundError } from 'src/lib/http-exceptions/errors/types/not-found-error';
 
 import { User } from '../entities/user.entity';
+import { UserTypeEnum } from '../enums/user-type.enum';
 import { userRepository } from '../repositories/user.repository';
 import type { CreateUserPayload } from '../dtos/create-user.dto';
 import type { UpdateUserPayload } from '../dtos/update-user.dto';
@@ -124,6 +125,10 @@ export class UserService {
     const userToUpdate = await this.getUserById(id, true);
 
     this.checkUserPermission(userToUpdate.id, logged_in_user_id);
+
+    if (payload.user_type && userToUpdate.user_type === UserTypeEnum.TEACHER) {
+      throw new ForbiddenException('Once a teacher always a teacher')
+    }
 
     const userItem = await User.update(payload, userToUpdate.hashed_password);
 
