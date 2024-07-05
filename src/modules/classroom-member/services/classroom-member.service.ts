@@ -1,4 +1,9 @@
-import { ForbiddenException, forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 
 import { User } from 'src/modules/user/entities/user.entity';
 import { PaginationService } from 'src/lib/pagination/pagination.service';
@@ -72,11 +77,13 @@ export class ClassroomMemberService {
     classroom_id,
     order_by_created_at,
     order_by_updated_at,
+    user_id,
   }: PaginateClassroomMembersPayload) {
-    const queryBuilder = this.createClassroomMemberQueryBuilder().where(
-      'classroom.id = :classroom_id',
-      { classroom_id },
-    );
+    const queryBuilder = this.createClassroomMemberQueryBuilder()
+      .where(classroom_id ? 'classroom.id = :classroom_id' : '1=1', {
+        classroom_id,
+      })
+      .andWhere(user_id ? 'user.id = :user_id' : '1=1', { user_id });
 
     if (order_by_created_at)
       queryBuilder.orderBy('classroom_member.created_at', order_by_created_at);

@@ -1,13 +1,21 @@
 import { z } from 'nestjs-zod/z';
 import { createZodDto } from 'nestjs-zod';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
-import { uuidSchema } from 'src/shared/schemas.shared';
+import { optionalUuidSchema } from 'src/shared/schemas.shared';
 import { createPaginationSchema } from 'src/utils/create-pagination-schema.util';
 
 export const paginateClassroomMembersSchema = createPaginationSchema({
-  classroom_id: uuidSchema,
-});
+  classroom_id: optionalUuidSchema,
+  user_id: optionalUuidSchema,
+}).refine(
+  (data) => {
+    if (!data.classroom_id && !data.user_id) return false;
+
+    return true;
+  },
+  { message: 'Provide a classroom id or a user id' },
+);
 
 export type PaginateClassroomMembersPayload = z.infer<
   typeof paginateClassroomMembersSchema
@@ -16,6 +24,9 @@ export type PaginateClassroomMembersPayload = z.infer<
 export class PaginateClassroomMembersDTO extends createZodDto(
   paginateClassroomMembersSchema,
 ) {
-  @ApiProperty({ type: String })
+  @ApiPropertyOptional({ type: String })
   classroom_id: string;
+
+  @ApiPropertyOptional({ type: String })
+  user_id: string;
 }
